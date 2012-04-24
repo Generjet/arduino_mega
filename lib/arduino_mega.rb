@@ -169,7 +169,8 @@ class ArduinoMega < Arduino
   end
 
   def p13h=(bflag)    
-    @p13h = send (bflag == true ? :set_high : :set_low), 13
+    @p13h = bflag
+    send (bflag == true ? :set_high : :set_low), 13
   end
 
   def to_s()
