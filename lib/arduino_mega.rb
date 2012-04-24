@@ -14,6 +14,8 @@ require "serialport"
 
 class Arduino
 
+  @serial = nil
+
   # initialize port and baudrate
   def initialize(port, baudrate=115200)
     puts "initialized"
@@ -160,11 +162,18 @@ class ArduinoMega < Arduino
   def initialize(args=[])
     super(*args)
     output(13)    # declare output pins  
+    if block_given? then
+      yield(self)
+      close()
+    end
   end
 
   def p13h=(bflag)
     send (bflag == true ? :set_high : :set_low), 13
   end
-  
+
+  def to_s()
+  end
+
 end
 
