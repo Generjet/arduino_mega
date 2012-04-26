@@ -157,28 +157,20 @@ end
 
 class ArduinoMega < Arduino
 
-  @@pins = (6..13).to_a
-  attr_accessor *@@pins.map{|x| "p#{x}h".to_sym }
- 
+  attr_accessor :p13h
 
   def initialize(args=[])
     super(*args)
-
-    methods = @@pins.map do |x| 
-      "def p#{x}h=(bflag)" + \
-      "  @p#{x}h = bflag\n" + \
-      "  send (bflag == true ? :set_high : :set_low), #{x}\n" + \
-      "end"
-    end
-    self.instance_eval methods.join("\n")    
-    
-    #output(*[13,12,11,10,9,8,7,6])    # declare output pins
-    output(*@@pins)    # declare output pins
-      
+    output(13)    # declare output pins  
     if block_given? then
       yield(self)
       close()
     end
+  end
+
+  def p13h=(bflag)    
+    @p13h = bflag
+    send (bflag == true ? :set_high : :set_low), 13
   end
 
   def to_s()
